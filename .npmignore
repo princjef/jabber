@@ -1,0 +1,7 @@
+src/
+dist/**/*.spec.*
+node_modules/
+/yarn.lock
+/tsconfig.json
+/tslint.json
+/.gitignore
