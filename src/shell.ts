@@ -71,7 +71,6 @@ export default class Shell {
             this._input = Input.register();
 
             this._input.on('interrupt', () => {
-                console.log('interrupted in shell');
                 this._processor.onInterrupt();
             });
 
