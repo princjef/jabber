@@ -1,6 +1,8 @@
 import * as readline from 'readline';
 import * as Prompt from 'inquirer/lib/prompts/base';
-import stripAnsi = require('strip-ansi');
+import * as stringWidth from 'string-width';
+import * as cliWidth from 'cli-width';
+import * as _ from 'lodash';
 
 import CommandHistory from './history';
 import Input from './input';
@@ -170,13 +172,22 @@ export default class CommandPrompt extends Prompt {
         }
 
         let message = this.getQuestion() + this._displayBuffer;
-        if (this._completion) {
-            const optionsString = this._completion.renderOptions();
+        if (this._completion && this._completion.possibleCompletionCount > 0) {
+            const separator = '  ';
+
+            const options = this._completion.renderOptions();
+            const optionsPerLine = Math.floor(
+                (this._cliWidth() + stringWidth(separator)) / (stringWidth(options[0]) + stringWidth(separator))
+            );
+
+            const optionsLines = _.chunk(options, optionsPerLine)
+                .map(line => line.join(separator));
+
             this._cursorMove = {
-                dx: stripAnsi(message).length - stripAnsi(optionsString).length,
-                dy: -1
+                dx: stringWidth(message) - stringWidth(optionsLines[optionsLines.length - 1]),
+                dy: -1 * optionsLines.length
             };
-            message += `\n${optionsString}`;
+            message += `\n${optionsLines.join('\n')}`;
         }
         this.screen.render(message);
         if (this._cursorMove !== null) {
@@ -193,7 +204,18 @@ export default class CommandPrompt extends Prompt {
     private _rewriteOutput() {
         // Simulate Ctrl+u to delete the line written previously
         this.rl.write(null!, { ctrl: true, name: 'u' });
-        // Write the value of the buffer to clear out the tab
+        // Write the value of the buffer so that edits to it will work correctly
         this.rl.write(this._displayBuffer);
+    }
+
+    private _cliWidth(): number {
+        const width = cliWidth({
+            defaultWidth: 80,
+            output: (this.rl as any).output
+        });
+
+        return process.platform === 'win32'
+            ? width - 1
+            : width;
     }
 }

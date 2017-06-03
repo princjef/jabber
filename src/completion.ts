@@ -65,13 +65,12 @@ export default class Completion {
         return command;
     }
 
-    renderOptions(): string {
+    renderOptions(): string[] {
         const longestOption = this._options.reduce((acc, val) => Math.max(acc, val.length), 0);
         return this._options
             // Right pad the entries so they are all the same length
             .map(option => `${option}${' '.repeat(longestOption - option.length)}`)
             // Invert the selected option, if applicable
-            .map((option, index) => index === this._selectionIndex ? chalk.inverse(option) : option)
-            .join('  ');
+            .map((option, index) => index === this._selectionIndex ? chalk.inverse(option) : option);
     }
 }
