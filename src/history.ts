@@ -27,14 +27,14 @@ export default class CommandHistory {
             : null;
     }
 
-    private constructor() {
-        this._commands = [];
+    private constructor(existingHistory: string[]) {
+        this._commands = existingHistory;
         this._excludedIndices = new Set();
         this._searchIndex = null;
     }
 
     public static create(existingHistory: string[] = []): CommandHistory {
-        return new CommandHistory();
+        return new CommandHistory(existingHistory);
     }
 
     /**
