@@ -13,7 +13,7 @@
   "license": "MIT",
   "types": "dist/index.d.ts",
   "scripts": {
-    "lint": "tslint src/**/*.ts --fix --type-check --project=tsconfig.json",
+    "lint": "tslint src/**/*.ts --fix --type-check --project tsconfig.json",
     "prebuild": "npm run lint",
     "build": "tsc",
     "watch": "concurrently -p \"[{name}]\" -n bld,tst -c dim,dim.gray  \"tsc -w\" \"ava dist/**/*.spec.js -w\"",
