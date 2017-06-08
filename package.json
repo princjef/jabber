@@ -1,6 +1,6 @@
 {
   "name": "noshell",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0",
   "description": "Unopinionated interactive CLIs for Node.JS",
   "keywords": [
     "shell",
