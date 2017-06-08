@@ -125,6 +125,7 @@ export default class CommandPrompt extends Prompt {
                 this._buffer = this._completion.renderCommand(this._buffer) + ' ';
                 this._completion = null;
                 this.render();
+                return;
             }
 
             this._completion = null;
